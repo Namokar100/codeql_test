@@ -4,9 +4,6 @@ project(crypto_test VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find OpenSSL for classical crypto
-find_package(OpenSSL REQUIRED)
-
 # Source files
 set(SOURCES
     src/main.cpp
@@ -21,8 +18,9 @@ add_executable(crypto_test ${SOURCES})
 # Include directories
 target_include_directories(crypto_test PRIVATE include)
 
-# Link libraries
-target_link_libraries(crypto_test PRIVATE OpenSSL::SSL OpenSSL::Crypto)
-
-# Add compile options for warnings
-target_compile_options(crypto_test PRIVATE -Wall -Wextra) 
+# Add compile options for warnings - make it compiler-specific
+if(MSVC)
+    target_compile_options(crypto_test PRIVATE /W4)
+else()
+    target_compile_options(crypto_test PRIVATE -Wall -Wextra)
+endif() 
