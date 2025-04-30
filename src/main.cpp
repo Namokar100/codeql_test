@@ -116,7 +116,7 @@ void demonstrate_vulnerable_crypto() {
     // Insecure random number generation
     std::cout << "\nGenerating insecure random bytes (VULNERABILITY)..." << std::endl;
     std::vector<unsigned char> insecure_bytes = crypto::vulnerable::generate_insecure_random_bytes(16);
-    std::cout << "Insecure random bytes: " << crypto::classical::bytes_to_hex(insecure_bytes) << std::endl;
+    std::cout << "Insecure random bytes: " << crypto::vulnerable::bytes_to_hex(insecure_bytes) << std::endl;
     
     // ECB mode encryption
     std::cout << "\nUsing ECB mode encryption (VULNERABILITY)..." << std::endl;
@@ -154,6 +154,68 @@ void demonstrate_vulnerable_crypto() {
     std::cout << "Original: " << leak_message << std::endl;
     std::cout << "Decrypted: " << leak_decrypted << std::endl;
     std::cout << "Warning: The key has been leaked in memory!" << std::endl;
+
+    // NEW: MD5 hashing (weak algorithm)
+    std::cout << "\nDemonstrating weak MD5 hashing (VULNERABILITY)..." << std::endl;
+    std::string password = "MySecurePassword123";
+    std::string hashed_password = crypto::vulnerable::md5_hash_password(password);
+    std::cout << "Original password: " << password << std::endl;
+    std::cout << "MD5 hash: " << hashed_password << std::endl;
+    std::cout << "Warning: MD5 is a broken hash algorithm!" << std::endl;
+    
+    // NEW: DES encryption (weak algorithm)
+    std::cout << "\nDemonstrating weak DES encryption (VULNERABILITY)..." << std::endl;
+    std::string des_message = "This message uses insecure DES encryption.";
+    std::string des_key = "WeakDES!";
+    std::vector<unsigned char> des_encrypted = crypto::vulnerable::des_encrypt(des_message, des_key);
+    std::string des_decrypted = crypto::vulnerable::des_decrypt(des_encrypted, des_key);
+    std::cout << "Original: " << des_message << std::endl;
+    std::cout << "Decrypted: " << des_decrypted << std::endl;
+    std::cout << "Warning: DES is a broken encryption algorithm!" << std::endl;
+    
+    // NEW: Buffer overflow vulnerability
+    std::cout << "\nDemonstrating buffer overflow vulnerability..." << std::endl;
+    const char* safe_input = "This is a safe input";
+    char* buffer = crypto::vulnerable::buffer_overflow_vulnerability(safe_input);
+    std::cout << "Buffer content: " << buffer << std::endl;
+    delete[] buffer; // Clean up
+
+    std::cout << "\nAttempting buffer overflow with long input..." << std::endl;
+    std::string user_input;
+    std::cout << "Enter a very long string to test buffer overflow: ";
+    std::getline(std::cin, user_input);
+    
+    if (!user_input.empty()) {
+        // Direct user input to vulnerable function - VULNERABILITY
+        char* overflow_buffer = crypto::vulnerable::buffer_overflow_vulnerability(user_input.c_str());
+        std::cout << "Buffer content (might crash if overflow occurred): " << overflow_buffer << std::endl;
+        delete[] overflow_buffer; // Clean up
+    }
+    
+    // NEW: SQL injection vulnerability
+    std::cout << "\nDemonstrating SQL injection vulnerability..." << std::endl;
+    std::string safe_username = "alice";
+    std::string sql_query = crypto::vulnerable::sql_query_builder(safe_username);
+    std::cout << "Safe SQL query: " << sql_query << std::endl;
+    
+    std::cout << "Enter a username to test SQL injection (try: alice' OR '1'='1): ";
+    std::string malicious_input;
+    std::getline(std::cin, malicious_input);
+    
+    if (!malicious_input.empty()) {
+        // Direct user input to vulnerable function - VULNERABILITY
+        std::string malicious_query = crypto::vulnerable::sql_query_builder(malicious_input);
+        std::cout << "Generated SQL query: " << malicious_query << std::endl;
+    }
+    
+    // NEW: Outdated SSL protocol
+    std::cout << "\nInitializing outdated SSL context (VULNERABILITY)..." << std::endl;
+    if (crypto::vulnerable::initialize_outdated_ssl_context()) {
+        std::cout << "Successfully initialized outdated SSL context (SSLv2)" << std::endl;
+        std::cout << "Warning: SSLv2 is deprecated and insecure!" << std::endl;
+    } else {
+        std::cout << "Failed to initialize outdated SSL context" << std::endl;
+    }
 }
 
 int main() {

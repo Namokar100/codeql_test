@@ -4,6 +4,11 @@
 #include <string>
 #include <vector>
 
+// Define OpenSSL-like constants and types for the simulated implementation
+#define MD5_DIGEST_LENGTH 16
+#define AES_BLOCK_SIZE 16
+#define DES_BLOCK_SIZE 8
+
 namespace crypto {
 namespace vulnerable {
 
@@ -30,6 +35,25 @@ bool vulnerable_password_check(const std::string& input_password, const std::str
 
 // VULNERABILITY: Doesn't clear sensitive data from memory
 std::string decrypt_and_leak_key(const std::vector<unsigned char>& ciphertext, const std::string& key);
+
+// NEW: VULNERABILITY: Uses MD5 (weak hash algorithm)
+std::string md5_hash_password(const std::string& password);
+
+// NEW: VULNERABILITY: Uses weak DES encryption
+std::vector<unsigned char> des_encrypt(const std::string& plaintext, const std::string& key);
+std::string des_decrypt(const std::vector<unsigned char>& ciphertext, const std::string& key);
+
+// NEW: VULNERABILITY: Uses buffer overflow vulnerability
+char* buffer_overflow_vulnerability(const char* input);
+
+// NEW: VULNERABILITY: SQL injection vulnerability
+std::string sql_query_builder(const std::string& user_input);
+
+// NEW: VULNERABILITY: Uses outdated protocol (SSLv2)
+bool initialize_outdated_ssl_context();
+
+// Helper functions
+std::string bytes_to_hex(const std::vector<unsigned char>& bytes);
 
 } // namespace vulnerable
 } // namespace crypto
